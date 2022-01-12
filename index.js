@@ -5,14 +5,15 @@ const createIntent = async ({id, client, displayName}) => {
     const agentPath = client.projectAgentPath(id);
     const intent = {
         displayName: displayName
-    }
+    };
+    
     const createIntentReq = {
         parent: agentPath,
         intent: intent
-    }
+    };
 
     const [response] = await client.createIntent(createIntentReq);
-    console.log(`Successfully created ${intent.displayName} intent.`)
+    console.log(`Successfully created ${intent.displayName} intent.`);
 }
 
 const runApp = () => {
