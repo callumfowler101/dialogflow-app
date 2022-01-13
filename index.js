@@ -4,11 +4,14 @@ const intentClient = new dialogflow.IntentsClient();
 
 const createIntent = async ({id, client, displayName, trainingPhrases}) => {
     const agentPath = client.projectAgentPath(id);
-    console.log(trainingPhrases);
-    const phrases = fs.readFile(trainingPhrases, 'utf-8',(err, data)=>{
-        if(err) throw err;
-        console.log(data);
-    });
+
+    if(trainingPhrases){
+        const phrases = fs.readFile(trainingPhrases, 'utf-8',(err, data)=>{
+            if(err) throw err;
+            console.log(data);
+        });
+    }
+    
     const intent = {
         displayName: displayName
     };
@@ -26,7 +29,8 @@ const runApp = () => {
     const projectID = 'apitestagent-bmmn';
     const command = process.argv[2];
     const displayName = process.argv[3];
-    const file = process.argv[4].toString();
+
+    const file = process.argv[4] ? process.argv[4].toString() : undefined ;
     
     if(command==="create-intent"){
         const intentConfig = {
