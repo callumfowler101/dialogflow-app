@@ -2,16 +2,35 @@ const dialogflow = require('@google-cloud/dialogflow');
 const fs = require('fs');
 const intentClient = new dialogflow.IntentsClient();
 
+const createTrainingArray = (phrases) => {
+    let phrasesArray;
+    try {
+        phrasesArray = fs.readFileSync(phrases, 'utf-8', data => data)
+                            .toString()
+                            .split(", ")
+                            .map(e=>e.replace(/"/g, ''))
+                            .map(data => {
+                            return {
+                                "name" : 'tests',
+                                "type" : 'EXAMPLE',
+                                "parts" : [{"text" : data}]
+                            }
+                        }
+                    );
+    } catch(e) {
+        console.log(e);
+        return;
+    }
+
+    console.log(phrasesArray);
+    return phrasesArray;
+}
+
 const createIntent = async ({id, client, displayName, trainingPhrases}) => {
     const agentPath = client.projectAgentPath(id);
 
-    if(trainingPhrases){
-        const phrases = fs.readFile(trainingPhrases, 'utf-8',(err, data)=>{
-            if(err) throw err;
-            console.log(data);
-        });
-    }
-    
+    if(trainingPhrases) createTrainingArray(trainingPhrases);
+
     const intent = {
         displayName: displayName
     };
