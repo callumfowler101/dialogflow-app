@@ -1,5 +1,6 @@
 const dialogflow = require('@google-cloud/dialogflow');
 const fs = require('fs');
+const uuid = require('uuid');
 const intentClient = new dialogflow.IntentsClient();
 
 const createTrainingArray = (phrases) => {
@@ -10,29 +11,26 @@ const createTrainingArray = (phrases) => {
                             .split(", ")
                             .map(e=>e.replace(/"/g, ''))
                             .map(data => {
-                            return {
-                                "name" : 'tests',
-                                "type" : 'EXAMPLE',
-                                "parts" : [{"text" : data}]
-                            }
-                        }
-                    );
+                                return {
+                                    "name" : uuid.v4(),
+                                    "type" : 'EXAMPLE',
+                                    "parts" : [{"text" : data}]
+                                }
+                            }   
+                        );
     } catch(e) {
-        console.log(e);
-        return;
+        return undefined;
     }
-
-    console.log(phrasesArray);
     return phrasesArray;
 }
 
 const createIntent = async ({id, client, displayName, trainingPhrases}) => {
     const agentPath = client.projectAgentPath(id);
-
-    if(trainingPhrases) createTrainingArray(trainingPhrases);
+    const phrases = createTrainingArray(trainingPhrases);
 
     const intent = {
-        displayName: displayName
+        displayName: displayName,
+        trainingPhrases: phrases
     };
     
     const createIntentReq = {
