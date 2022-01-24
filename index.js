@@ -42,6 +42,10 @@ const createIntent = async ({id, client, displayName, trainingPhrases}) => {
     console.log(`Successfully created ${intent.displayName} intent.`);
 }
 
+const createEntities = async({id, client, displayName, entityList}) => {
+    // const agentPath = client.pro
+}
+
 const runApp = () => {
     const projectID = 'apitestagent-bmmn';
     const command = process.argv[2];
