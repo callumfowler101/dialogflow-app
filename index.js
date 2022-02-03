@@ -43,7 +43,21 @@ const createIntent = async ({id, client, displayName, trainingPhrases}) => {
 }
 
 const createEntities = async({id, client, displayName, entityList}) => {
-    // const agentPath = client.pro
+    const agentPath = client.projectAgentPath(id);
+    const entitiesArray = createEntityArray(entityList);
+
+    const entity = {
+        displayName: displayName,
+        entities: entitiesArray
+    }
+
+    const createEntityReq = {
+        parent: agentPath,
+        entity: entity
+    }
+
+    const [response] = await client.createEntities(createEntityReq);
+    console.log(`Successfully created ${entity.displayName} entity.`);
 }
 
 const runApp = () => {
